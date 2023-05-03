@@ -1,18 +1,22 @@
-from django.shortcuts import render
 from rest_framework import views, generics
-from .serializers import ArticleSerializer, ServiceSerializer, AboutUsSerializer, StaticInformationSerializer, TranslationSerializer, LangsSerializer
-from .serializers import NewAplSerializer
-from admins.models import Articles, Languages, Translations, Services, AboutUs, StaticInformation, Reviews
+from django.core.mail import EmailMultiAlternatives
+from django.db.models import Q
+from django.template.loader import get_template
+from rest_framework import views, generics
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from .models import CarMarks, CarsModel, States, City, Leads, Applications, AplicationNbm, ShortApplication, SomeAplication
-import requests
-import json
-from django.conf import settings
-from django.core.mail import EmailMessage, EmailMultiAlternatives
-from .serializers import CarMarkSerializer, CarModelSerializer, CitySimpleSerializer, CitySerializer, StateSerializer, LeadsCreateSerialzier, LeadsViewSerializer, ApplicationCreateSerializer, ReviewSerializer, ShortApplicationSerializer
-from django.template.loader import get_template
-from django.db.models import Q
+
+from admins.models import Articles, Languages, Translations, Services, AboutUs, StaticInformation, Reviews
+from .models import CarMarks, CarsModel, States, City, Leads, Applications, AplicationNbm, ShortApplication, \
+    SomeAplication
+from .serializers import ArticleSerializer, ServiceSerializer, AboutUsSerializer, StaticInformationSerializer, \
+    TranslationSerializer, LangsSerializer
+from .serializers import CarMarkSerializer, CarModelSerializer, CitySimpleSerializer, CitySerializer, StateSerializer, \
+    LeadsCreateSerialzier, LeadsViewSerializer, ApplicationCreateSerializer, ReviewSerializer, \
+    ShortApplicationSerializer
+from .serializers import NewAplSerializer
+
+
 # Create your views here.
 
 # pagination
@@ -48,8 +52,14 @@ class ServicesDetailView(generics.RetrieveAPIView):
     serializer_class = ServiceSerializer
 
 
+# servise detail view
+class ServicesSlugDetailView(generics.RetrieveAPIView):
+    queryset = Services.objects.all()
+    serializer_class = ServiceSerializer
+    lookup_field = "slug"
 
-# about us 
+
+# about us
 class AboutUsView(views.APIView):
     def get(self, request, format=None):
         obj = AboutUs.objects.first()
@@ -58,9 +68,8 @@ class AboutUsView(views.APIView):
             return Response({'detail': 'There is no About Us information'})
 
         serializer = AboutUsSerializer(obj, context={'request': request})
-        
-        return Response(serializer.data)
 
+        return Response(serializer.data)
 
 
 # static information
@@ -76,7 +85,6 @@ class StaticInfView(views.APIView):
         return Response(serializer.data)
 
 
-
 # translations
 class TranslationsView(views.APIView):
     def get(self, request, fromat=None):
@@ -90,7 +98,6 @@ class LangsList(generics.ListAPIView):
     queryset = Languages.objects.filter(active=True)
     serializer_class = LangsSerializer
     pagination_class = BasePagination
-
 
 
 # car mark list
@@ -119,14 +126,11 @@ class CarModelsList(generics.ListAPIView):
         return queryset
 
 
-
-
 # state view
 class StatesList(generics.ListAPIView):
     queryset = States.objects.all()
     serializer_class = StateSerializer
     pagination_class = BasePagination
-
 
     def get_queryset(self):
         queryset = self.queryset
@@ -136,12 +140,11 @@ class StatesList(generics.ListAPIView):
             queryset = queryset.extra(where=[f'LOWER(name ::varchar) LIKE %s'], params=[f'%{query.lower()}%'])
 
         return queryset
-    
 
 
 # city list
 class CityList(generics.ListAPIView):
-    serializer_class  = CitySimpleSerializer
+    serializer_class = CitySimpleSerializer
     pagination_class = BasePagination
 
     def get_queryset(self):
@@ -156,11 +159,9 @@ class CityList(generics.ListAPIView):
             except:
                 pass
 
-        
         if query != '':
             queryset = queryset.filter(Q(name__iregex=query) | Q(zip__iregex=query))
 
-        
         return queryset
 
 
@@ -170,13 +171,10 @@ class CityDetailView(generics.RetrieveAPIView):
     queryset = City.objects.all()
 
 
-
-
 # lead create
 class LeadCreate(generics.CreateAPIView):
     queryset = Leads.objects.all()
     serializer_class = LeadsCreateSerialzier
-
 
     def perform_create(self, serializer):
         lead = serializer.save()
@@ -211,7 +209,6 @@ class LeadUpdateView(generics.UpdateAPIView):
     serializer_class = LeadsCreateSerialzier
 
 
-
 # aplication create view
 class ApplicationCreateView(generics.CreateAPIView):
     queryset = Applications.objects.all()
@@ -240,7 +237,6 @@ class ApplicationCreateView(generics.CreateAPIView):
 
         return apl
 
-
     def post(self, request, *args, **kwargs):
         lead_id = self.request.data.get('lead')
         try:
@@ -253,7 +249,6 @@ class ApplicationCreateView(generics.CreateAPIView):
         if type(nbms) != list:
             return Response({'TypeError': 'nbms param should be list not {}'.format(type(nbms).__name__)})
 
-        
         contact_me = request.data.get('contact_me', False)
         contact_else = request.data.get('contact_else', '')
 
@@ -277,18 +272,15 @@ class ShortAplicationView(generics.CreateAPIView):
     fields = '__all__'
 
 
-
 # add application (sory if you read this)
 class NewAmgAplication(generics.CreateAPIView):
     queryset = SomeAplication.objects.all()
     serializer_class = NewAplSerializer
 
 
-
 # get order status
 class GetOrderStatus(views.APIView):
     def get(self, request, format=None):
-
         data = {
             'api_key': settings.SRM_API_KEY
         }

@@ -1,5 +1,10 @@
+import random
 import requests
+import string
+
 from django.conf import settings
+from django.utils.text import slugify
+
 
 # get city coordinates by zip
 def get_coordinates(city):
@@ -37,3 +42,24 @@ def get_distance(ship_to, ship_from):
         distance = 0
 
     return distance
+
+
+def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+def unique_slug_generator(instance, title, new_slug=None):
+    if new_slug is not None:
+        slug = new_slug
+    else:
+        slug = slugify(title)
+
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(slug=slug).exists()
+    if qs_exists:
+        new_slug = "{slug}-{randstr}".format(
+                    slug=slug,
+                    randstr=random_string_generator(size=4)
+                )
+        return unique_slug_generator(instance, title, new_slug=new_slug)
+    return slug

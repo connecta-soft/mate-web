@@ -83,12 +83,12 @@ WSGI_APPLICATION = 'matelog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'localhost',
-        'NAME': 'django_db',
-        'USER': 'root',
-        'PASSWORD': '',
-        'PORT': '3306',
+        'NAME': 'mete',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'PORT': '5432',
     }
 }
 

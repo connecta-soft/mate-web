@@ -61,7 +61,6 @@ pluggy==1.0.0
 plyer==2.0.0
 proglog==0.1.10
 protobuf==3.20.1
-psycopg2==2.9.3
 psycopg2-binary==2.9.3
 py==1.11.0
 pyaes==1.6.1

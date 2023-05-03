@@ -6,6 +6,10 @@ import re
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+
+from main.utils import unique_slug_generator
+
+
 # telephone nbm validator
 
 class MetaTags(models.Model):
@@ -194,6 +198,20 @@ class Services(models.Model):
     order = models.PositiveIntegerField('Order', blank=True, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
     meta_field = models.ForeignKey(MetaTags, on_delete=models.CASCADE, blank=True, null=True)
+    slug = models.SlugField(blank=True, max_length=255)
+    __original_title = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_title = self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = unique_slug_generator(self, self.title)
+        if self.title != self.__original_title:
+            self.slug = unique_slug_generator(self, self.title)
+        super().save(*args, **kwargs)
+        self.__original_title = self.title
 
 
 @receiver(post_delete, sender=Services)
