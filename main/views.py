@@ -38,6 +38,7 @@ class ArticlesList(generics.ListAPIView):
 class ArticlesDetail(generics.RetrieveAPIView):
     queryset = Articles.objects.filter(active=True)
     serializer_class = ArticleSerializer
+    lookup_field = "slug"
 
 
 # service view

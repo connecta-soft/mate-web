@@ -1,11 +1,11 @@
-from django.db import models
-from easy_thumbnails.fields import ThumbnailerImageField
-from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator, FileExtensionValidator
 import re
+
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, post_delete
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from easy_thumbnails.fields import ThumbnailerImageField
 
 from main.utils import unique_slug_generator
 
@@ -15,7 +15,6 @@ from main.utils import unique_slug_generator
 class MetaTags(models.Model):
     meta_deck = models.JSONField('Meta desk', blank=True, null=True)
     meta_keys = models.JSONField('Meta keys', blank=True, null=True)
-
 
 
 def telephone_validator(value):
@@ -45,10 +44,8 @@ class StaticInformation(models.Model):
     map = models.TextField('Iframe карты', blank=True, null=True)
     work_time = models.JSONField('Время работы', blank=True, null=True)
 
-
     class Meta:
         verbose_name = 'static_inf'
-
 
     def __str__(self):
         return 'Static information'
@@ -63,7 +60,8 @@ class ArticleCategories(models.Model):
     class Meta:
         verbose_name = 'ArticleCategory'
 
-# blog 
+
+# blog
 class Articles(models.Model):
     image = ThumbnailerImageField(upload_to='article_images', blank=True, null=True)
     title = models.JSONField('Заголовок')
@@ -75,7 +73,20 @@ class Articles(models.Model):
     active = models.BooleanField(default=True, editable=True)
     category = models.ManyToManyField(ArticleCategories, blank=True, null=True, related_name='articles')
     meta = models.ForeignKey(MetaTags, on_delete=models.CASCADE, blank=True, null=True)
+    slug = models.SlugField(blank=True, max_length=255)
+    __original_title = None
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_title = self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug: # noqa
+            self.slug = unique_slug_generator(self, self.title)
+        if self.title != self.__original_title:
+            self.slug = unique_slug_generator(self, self.title)
+        super().save(*args, **kwargs)
+        self.__original_title = self.title
 
     def get_format_data(self):
         return str(self.created_date.year) + '-' + str(self.created_date.month) + '-' + str(self.created_date.day)
@@ -91,7 +102,6 @@ class Articles(models.Model):
 
         return d + '.' + m + '.' + str(self.created_date.year)
 
-
     class Meta:
         verbose_name = 'articles'
 
@@ -105,7 +115,6 @@ def article_delete_image(sender, instance, *args, **kwargs):
         pass
 
 
-
 # article images
 class ArticleImages(models.Model):
     article = models.ForeignKey(Articles, on_delete=models.CASCADE, related_name='images')
@@ -113,7 +122,6 @@ class ArticleImages(models.Model):
 
     class Meta:
         verbose_name = 'art_images'
-
 
 
 # languages
@@ -129,9 +137,6 @@ class Languages(models.Model):
 
     class Meta:
         verbose_name = 'lang'
-
-
-
 
 
 # translation groups
@@ -152,7 +157,6 @@ class Translations(models.Model):
     key = models.CharField(max_length=255)
     value = models.JSONField("Значение")
 
-
     def __str__(self):
         return f'{self.group.sub_text}.{self.key}'
 
@@ -161,11 +165,9 @@ class Translations(models.Model):
         unique_together = ['key', 'group']
 
 
-
 # inputs model
 class AdminInputs(models.Model):
     inputs = models.JSONField('Input', blank=True, null=True)
-
 
 
 # about us
