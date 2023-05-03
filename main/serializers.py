@@ -1,10 +1,10 @@
-from rest_framework import serializers
-from admins.models import Services, Articles, ArticleImages, StaticInformation, AboutUs, Languages, Translations, MetaTags, Reviews
-from easy_thumbnails.templatetags.thumbnail import thumbnail_url, get_thumbnailer
-from .models import CarMarks, CarsModel, City, States, Leads, Applications, AplicationNbm, ShortApplication, SomeAplication
-from django.conf import settings
 from django.core.files.storage import default_storage
-import requests
+from easy_thumbnails.templatetags.thumbnail import get_thumbnailer
+from rest_framework import serializers
+
+from admins.models import Services, Articles, StaticInformation, AboutUs, Languages, MetaTags, Reviews
+from .models import CarMarks, CarsModel, City, States, Leads, Applications, AplicationNbm, ShortApplication, \
+    SomeAplication
 from .utils import *
 
 
@@ -39,6 +39,7 @@ class ThumbnailSerializer(serializers.BaseSerializer):
 
         return url
 
+
 # field lang serializer
 class JsonFieldSerializer(serializers.BaseSerializer):
     def to_representation(self, instance):
@@ -66,7 +67,6 @@ class MetaFieldSerializer(serializers.ModelSerializer):
         exclude = ['id']
 
 
-
 # articles
 class ArticleSerializer(serializers.ModelSerializer):
     title = JsonFieldSerializer()
@@ -82,7 +82,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 # service serializer
 class ServiceSerializer(serializers.ModelSerializer):
     title = JsonFieldSerializer()
@@ -94,7 +93,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Services
         fields = "__all__"
-
 
 
 # about us
@@ -125,10 +123,9 @@ class StaticInformationSerializer(serializers.ModelSerializer):
         exclude = ['id']
 
 
-
 # translation serializer
 class TranslationSerializer(serializers.Serializer):
-    def to_representation(self, instance):          
+    def to_representation(self, instance):
         data = {}
 
         for item in instance:
@@ -139,14 +136,11 @@ class TranslationSerializer(serializers.Serializer):
         return data
 
 
-
-
 # langs serializer
 class LangsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Languages
         fields = '__all__'
-
 
 
 # car mark serializer
@@ -156,7 +150,6 @@ class CarMarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarMarks
         fields = "__all__"
-
 
 
 # car model serializer
@@ -172,6 +165,7 @@ class CarModelSerializer(serializers.ModelSerializer):
 # state serializer
 class StateSerializer(serializers.ModelSerializer):
     name = JsonFieldSerializer()
+
     class Meta:
         model = States
         fields = '__all__'
@@ -187,10 +181,9 @@ class CitySerializer(serializers.ModelSerializer):
         model = City
         fields = "__all__"
 
-
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        
+
         params = {
             "zip": instance.zip,
             "key": "17o8dysaCDrgvlc"
@@ -198,7 +191,7 @@ class CitySerializer(serializers.ModelSerializer):
 
         coord_request = get_coordinates(instance)
 
-        iframe = f"""<iframe width="100%" height="300" allowfullscreen="allowfullscreen" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border: 0px;" class="lazyLoad isLoaded" src="https://maps.google.com/maps?q={ coord_request }&hl=es&z=14&amp;output=embed"></iframe>"""
+        iframe = f"""<iframe width="100%" height="300" allowfullscreen="allowfullscreen" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border: 0px;" class="lazyLoad isLoaded" src="https://maps.google.com/maps?q={coord_request}&hl=es&z=14&amp;output=embed"></iframe>"""
         data['iframe'] = iframe
 
         return data
@@ -213,8 +206,6 @@ class CitySimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = City
         fields = "__all__"
-
-
 
 
 # lead view serializer
@@ -239,8 +230,6 @@ class LeadsCreateSerialzier(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['price', 'price_first_tarif ', 'price_second_tarif']
 
-
-    
     def save(self, **kwargs):
         lead = super().save(**kwargs)
         url = 'https://ml.msgplane.com/api/rest/get/price/'
@@ -273,7 +262,6 @@ class LeadsCreateSerialzier(serializers.ModelSerializer):
         serializer = LeadsViewSerializer(instance, context={'request': self.context.get('request')})
 
         return serializer.data
-        
 
 
 # application nbm serializer
@@ -289,7 +277,7 @@ class AplicationViewSerializer(serializers.ModelSerializer):
     ship_from = CitySimpleSerializer()
     ship_to = CitySerializer()
     nbms = ApplicationNbmSerializer()
-    
+
     class Meta:
         model = Applications
         fields = '__all__'
@@ -328,14 +316,14 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
 
         if not validated_data.get('email'):
             validated_data['email'] = lead.email
-        
+
         validated_data['price'] = float(lead.price)
 
         if validated_data['tarif'] == '1':
             validated_data['final_price'] = float(lead.price_first_tarif)
         elif validated_data['tarif'] == '2':
             validated_data['final_price'] = float(lead.price_second_tarif)
-    
+
         return super().create(validated_data)
 
     def to_representation(self, instance):
@@ -354,7 +342,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 # short application serializer
 class ShortApplicationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -362,10 +349,8 @@ class ShortApplicationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 # serializer
 class NewAplSerializer(serializers.ModelSerializer):
     class Meta:
         model = SomeAplication
         fields = '__all__'
-

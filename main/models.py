@@ -113,7 +113,12 @@ class Applications(models.Model):
     contact_me = models.BooleanField('Contact me', default=True)
     contact_else = models.CharField('Contact else', blank=True, null=True, max_length=10, validators=[is_numeric_validator])
     adres_type = models.CharField("Adres type", max_length=255, choices=ADRES_TYPES)
-
+    business_name = models.CharField("Business name", max_length=255, blank=True, null=True)
+    someone_fullname = models.CharField("Someone fullname", max_length=255, blank=True, null=True)
+    someone_phone = models.CharField("Someone phone", max_length=255, blank=True, null=True)
+    exact_business_name = models.CharField("Exact business name", max_length=255, blank=True, null=True)
+    exact_someone_phone = models.CharField("Exact someone phone", max_length=255, blank=True, null=True)
+    exact_someone_fullname = models.CharField("Exact someone fullname", max_length=255, blank=True, null=True)
 
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
