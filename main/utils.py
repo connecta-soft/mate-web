@@ -36,10 +36,10 @@ def get_distance(ship_to, ship_from):
     distance_request = requests.get(
         distance_url, params=distance_params)
     try:
-        if 200 <= distance_request.status_code < 301: 
-            distance_request = distance_request.json() 
-            distance = distance_request.get('rows', [0])[0].get('elements', [0])[0].get('distance', {}).get("text") 
-        else: 
+        if 200 <= distance_request.status_code < 301:
+            distance_request = distance_request.json()
+            distance = distance_request.get('rows', [0])[0].get('elements', [0])[0].get('distance', {}).get("text")
+        else:
             distance = 0
     except:
         distance = 0

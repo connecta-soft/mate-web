@@ -190,7 +190,7 @@ class LeadCreate(generics.CreateAPIView):
         lang = Languages.objects.filter(default=True).first()
 
         try:
-            subject = f'Your Auto Transport Request For {lead.vehicle.name}'
+            subject = f'Your Auto Transport Request For {lead.vehicle.name["en"]}'
             text_content = 'some'
             html_content = html_templ.render(context={'lead': lead, 'lang': lang})
             msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, [lead.email])
