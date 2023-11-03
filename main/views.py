@@ -16,6 +16,7 @@ from .serializers import CarMarkSerializer, CarModelSerializer, CitySimpleSerial
     LeadsCreateSerialzier, LeadsViewSerializer, ApplicationCreateSerializer, ReviewSerializer, \
     ShortApplicationSerializer
 from .serializers import NewAplSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -178,6 +179,10 @@ class LeadCreate(generics.CreateAPIView):
     queryset = Leads.objects.all()
     serializer_class = LeadsCreateSerialzier
 
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def perform_create(self, serializer):
         lead = serializer.save()
 
@@ -185,7 +190,7 @@ class LeadCreate(generics.CreateAPIView):
         lang = Languages.objects.filter(default=True).first()
 
         try:
-            subject = 'hello'
+            subject = f'Your Auto Transport Request For {lead.vehicle.name}'
             text_content = 'some'
             html_content = html_templ.render(context={'lead': lead, 'lang': lang})
             msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, [lead.email])
