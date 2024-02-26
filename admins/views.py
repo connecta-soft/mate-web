@@ -17,7 +17,7 @@ from .serializers import TranslationSerializer
 from rest_framework.response import Response
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
-from main.models import CarsModel, CarMarks, States, City, Leads, Applications, ShortApplication, SomeAplication
+from main.models import CarsModel, CarMarks, States, City, Leads, Applications, ShortApplication, SomeAplication, Leads2
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth import logout
 import os
@@ -1806,11 +1806,11 @@ class LeadsList(ListView):
 
 # leads list
 class LeadsList2(ListView):
-    model = Leads
+    model = Leads2
     template_name = 'admin/leads2.html'
 
     def get_queryset(self):
-        queryset = Leads.objects.order_by("-id")
+        queryset = Leads2.objects.order_by("-id")
         queryset = search(self.request, queryset, ['name'])
 
         return queryset
@@ -1843,7 +1843,7 @@ class LeadDetailView(DetailView):
 
 # lead detail view
 class LeadDetailView2(DetailView):
-    model = Leads
+    model = Leads2
     template_name = 'admin/lead_view2.html'
 
     def get_context_data(self, **kwargs):
