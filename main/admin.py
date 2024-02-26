@@ -22,7 +22,7 @@ class LeadsAdmin2(admin.ModelAdmin):
     list_display = [it.name for it in Leads._meta.fields]
 
     class Meta:
-        models = Leads
+        models = Leads2
 
 
 admin.site.register(Leads2, LeadsAdmin2)
