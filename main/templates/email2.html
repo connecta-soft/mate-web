@@ -13,10 +13,10 @@
 
     <ul>
         <li>
-            Transport_car_FROM: {{ ship_from.name|get_item:en }}
+            Transport_car_FROM: {{ ship_from.name.en }}
         </li>
         <li>
-            Transport_car_TO: {{ ship_to.name|get_item:en }}
+            Transport_car_TO: {{ ship_to.name.en }}
         </li>
         <li>
             Transport_type: {% if ship_via_id == '1' %} Open {% else %} Enclosed {% endif %}
