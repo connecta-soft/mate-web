@@ -288,6 +288,7 @@ class Leads2CreateSerialzier(serializers.ModelSerializer):
             msg.send()
         except Exception as e:
             logging.error(str(e))
+        return Leads2.objects.create(**validated_data)
 
 
 # application nbm serializer
