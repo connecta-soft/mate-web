@@ -1,3 +1,6 @@
+
+{% load get_item %}
+
 <style>
     ul {
         list-style-type: none;
@@ -10,10 +13,10 @@
 
     <ul>
         <li>
-            Transport_car_FROM: {{ ship_from.name }}
+            Transport_car_FROM: {{ ship_from.name|get_item:eng }}
         </li>
         <li>
-            Transport_car_TO: {{ ship_to.name }}
+            Transport_car_TO: {{ ship_to.name|get_item:en }}
         </li>
         <li>
             Transport_type: {% if ship_via_id == '1' %} Open {% else %} Enclosed {% endif %}
