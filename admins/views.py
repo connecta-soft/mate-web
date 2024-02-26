@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
-from .models import Articles, Languages, Translations, TranlsationGroups, StaticInformation, AdminInputs, ArticleCategories, ArticleImages
+from .models import Articles, Languages, Translations, TranlsationGroups, StaticInformation, AdminInputs, \
+    ArticleCategories, ArticleImages
 from .models import AboutUs, Services, MetaTags, telephone_validator, Reviews
 from .forms import LngForm, UserForm, ApplicationForm
 from django.core.exceptions import ValidationError
@@ -23,6 +24,8 @@ import os
 from django.conf import settings
 import requests
 from main.utils import get_distance
+
+
 # Create your views here.
 
 # home admin
@@ -54,12 +57,12 @@ def delete_alot(request):
     id_list = request.POST.getlist('id')
     url = request.POST.get('url')
 
-    #try:
+    # try:
     model = apps.get_model(model_name=model_name, app_label=app_name)
     for item in id_list:
         if f'id[{item}]' in request.POST:
             model.objects.get(id=int(item)).delete()
-    #except:
+    # except:
     #    pass
 
     return redirect(url)
@@ -579,7 +582,8 @@ def translation_update(request):
             if key == '':
                 return JsonResponse({'key_error': 'Key is required'})
 
-            if str(key) in [str(it.key) for it in Translations.objects.filter(group=translation.group).exclude(id=translation.id)]:
+            if str(key) in [str(it.key) for it in
+                            Translations.objects.filter(group=translation.group).exclude(id=translation.id)]:
                 return JsonResponse({'key_error': 'Key is already in use'})
 
             translation.key = key
@@ -613,7 +617,7 @@ def add_trans_group(request):
 
         if data_dict.get('sub_text', '') == '':
             return JsonResponse({'key_error': 'Sub text is required'})
-        elif (data_dict.get('sub_text'), ) in TranlsationGroups.objects.values_list('sub_text'):
+        elif (data_dict.get('sub_text'),) in TranlsationGroups.objects.values_list('sub_text'):
             return JsonResponse({'key_error': 'This key is already in use'})
 
         try:
@@ -671,7 +675,8 @@ class TranslationGroupUdpate(UpdateView):
             new_data['values'] = []
             for lng in langs:
                 new_data['values'].append(
-                    {'key': f'value[{l}][{lng.code}]', 'value': request.POST[f'value[{l}][{lng.code}]'], 'def_lang': lang.code, 'lng': lng.code})
+                    {'key': f'value[{l}][{lng.code}]', 'value': request.POST[f'value[{l}][{lng.code}]'],
+                     'def_lang': lang.code, 'lng': lng.code})
 
             data.append(new_data)
 
@@ -681,24 +686,30 @@ class TranslationGroupUdpate(UpdateView):
             transls[i].key = request.POST.get(f'key[{i + 1}]', '')
 
             if transls[i].key == '':
-                return render(request, template_name=self.template_name, context={'key_errors': {str(i+1): 'Key is required'},  'new_objects': objects, 'langs': langs, 'len': int(items_count) + 1})
+                return render(request, template_name=self.template_name,
+                              context={'key_errors': {str(i + 1): 'Key is required'}, 'new_objects': objects,
+                                       'langs': langs, 'len': int(items_count) + 1})
 
-            in_default_lng = request.POST.get(f'value[{i+1}][{lang.code}]', '')
+            in_default_lng = request.POST.get(f'value[{i + 1}][{lang.code}]', '')
 
             if in_default_lng == '':
-                return render(request, template_name=self.template_name, context={'lng_errors': {str(i+1): 'This language is required'}, 'new_objects': objects, 'langs': langs, 'len': int(items_count) + 1})
+                return render(request, template_name=self.template_name,
+                              context={'lng_errors': {str(i + 1): 'This language is required'}, 'new_objects': objects,
+                                       'langs': langs, 'len': int(items_count) + 1})
 
             value_dict = {}
             for lang in langs:
                 value_dict[str(lang.code)
-                           ] = request.POST[f'value[{i + 1}][{lang.code}]']
+                ] = request.POST[f'value[{i + 1}][{lang.code}]']
 
             transls[i].value = value_dict
             try:
                 transls[i].full_clean()
                 transls[i].save()
             except:
-                return render(request, template_name=self.template_name, context={'key_errors': {str(i): 'Key is alredy in use'},  'new_objects': objects, 'langs': langs, 'len': items_count})
+                return render(request, template_name=self.template_name,
+                              context={'key_errors': {str(i): 'Key is alredy in use'}, 'new_objects': objects,
+                                       'langs': langs, 'len': items_count})
 
         for i in range(len(transls) + 1, int(items_count) + 1):
             new_trans = Translations()
@@ -706,17 +717,21 @@ class TranslationGroupUdpate(UpdateView):
             new_trans.key = request.POST.get(f'key[{i}]', '')
 
             if new_trans.key == '':
-                return render(request, template_name=self.template_name, context={'key_errors': {str(i): 'Key is required'},  'new_objects': objects, 'langs': langs, 'len': items_count})
+                return render(request, template_name=self.template_name,
+                              context={'key_errors': {str(i): 'Key is required'}, 'new_objects': objects,
+                                       'langs': langs, 'len': items_count})
 
             value_dict = {}
             in_default_lng = request.POST.get(f'value[{i}][{lang.code}]', '')
 
             if in_default_lng == '':
-                return render(request, template_name=self.template_name, context={'lng_errors': {str(i): 'This language is required'}, 'new_objects': objects, 'langs': langs, 'len': items_count})
+                return render(request, template_name=self.template_name,
+                              context={'lng_errors': {str(i): 'This language is required'}, 'new_objects': objects,
+                                       'langs': langs, 'len': items_count})
 
             for lang in langs:
                 value_dict[str(lang.code)
-                           ] = request.POST[f'value[{i}][{lang.code}]']
+                ] = request.POST[f'value[{i}][{lang.code}]']
 
             new_trans.value = value_dict
             new_trans.group = self.get_object()
@@ -725,7 +740,9 @@ class TranslationGroupUdpate(UpdateView):
                 new_trans.full_clean()
                 new_trans.save()
             except:
-                return render(request, template_name=self.template_name, context={'key_errors': {str(i): 'Key is alredy in use'}, 'new_objects': objects, 'langs': langs, 'len': items_count})
+                return render(request, template_name=self.template_name,
+                              context={'key_errors': {str(i): 'Key is alredy in use'}, 'new_objects': objects,
+                                       'langs': langs, 'len': items_count})
 
         return redirect('transl_group_detail', pk=self.get_object().id)
 
@@ -999,7 +1016,8 @@ class ServicesUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ServicesUpdate, self).get_context_data(**kwargs)
         context['langs'] = Languages.objects.filter(active=True).order_by('-default')
-        context['sevices'] = Services.objects.exclude(id=self.get_object().id).exclude(id__in=[it.id for it in self.get_object().children.all()])
+        context['sevices'] = Services.objects.exclude(id=self.get_object().id).exclude(
+            id__in=[it.id for it in self.get_object().children.all()])
         context['lang'] = Languages.objects.filter(active=True).filter(default=True).first()
         context['dropzone_key'] = self.model._meta.verbose_name
 
@@ -1161,8 +1179,8 @@ class AdminsList(ListView):
         query = self.request.GET.get("q", '')
 
         if query != '':
-            queryset = queryset.filter(Q(username__iregex=query) | Q(first_name__iregex=query) | Q(last_name__iregex=query))
-        
+            queryset = queryset.filter(
+                Q(username__iregex=query) | Q(first_name__iregex=query) | Q(last_name__iregex=query))
 
         return queryset
 
@@ -1273,6 +1291,7 @@ class CarsModelList(ListView):
             active=True).filter(default=True).first()
 
         return context
+
 
 # add car model
 
@@ -1499,7 +1518,6 @@ class StatesList(ListView):
                 end_set.add(it)
 
             queryset = list_to_queryset(list(end_set))
-
 
         return queryset
 
@@ -1784,13 +1802,36 @@ class LeadsList(ListView):
         context['url'] = search_pagination(self.request)
 
         return context
-    
+
+
+# leads list
+class LeadsList2(ListView):
+    model = Leads
+    template_name = 'admin/leads2.html'
+
+    def get_queryset(self):
+        queryset = Leads.objects.order_by("-id")
+        queryset = search(self.request, queryset, ['name'])
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(LeadsList2, self).get_context_data(**kwargs)
+
+        context['objects'] = get_lst_data(
+            self.get_queryset(), self.request, 20)
+        context['page_obj'] = paginate(self.get_queryset(), self.request, 20)
+        context['lang'] = Languages.objects.filter(
+            active=True).filter(default=True).first()
+        context['url'] = search_pagination(self.request)
+
+        return context
+
 
 # lead detail view
 class LeadDetailView(DetailView):
     model = Leads
     template_name = 'admin/lead_view.html'
-
 
     def get_context_data(self, **kwargs):
         context = super(LeadDetailView, self).get_context_data(**kwargs)
@@ -1798,6 +1839,17 @@ class LeadDetailView(DetailView):
         return context
 
 
+
+
+# lead detail view
+class LeadDetailView2(DetailView):
+    model = Leads
+    template_name = 'admin/lead_view2.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LeadDetailView, self).get_context_data(**kwargs)
+        context['lang'] = Languages.objects.filter(active=True).filter(default=True).first()
+        return context
 
 # applicatins list
 class ApplicationsList(ListView):
@@ -1876,7 +1928,6 @@ class ApplicationUpdate(UpdateView):
         elif apl.tarif == '2':
             apl.final_price = float(price_request.get('1', 0)) + 500
 
-        
         distance = get_distance(apl.ship_to, apl.ship_from)
         apl.distance = distance
 
@@ -1926,11 +1977,10 @@ def fill_db_view(request):
             name = 'new18'
         elif 'CITY19' in request.POST:
             name = 'new19'
-        
 
         f = requests.get(f'https://raw.githubusercontent.com/ABBA-Corp/matelog/master/admins/static/json/{name}.json')
         j = f.json()
-        #zips = [str(it.zip) for it in City.objects.all()]
+        # zips = [str(it.zip) for it in City.objects.all()]
 
         for it in j:
             try:
@@ -1960,7 +2010,6 @@ def fill_db_view(request):
                         state.save()
                 except:
                     pass
-
 
     return render(request, 'admin/fiil_db.html')
 
@@ -2002,7 +2051,8 @@ class ReviewsCreate(CreateView):
         context['images'] = []
 
         if self.request.session.get(context['dropzone_key']):
-            context['images'] = list({'name': it['name'], 'id': clean_text(str(it['name']))} for it in self.request.session[context['dropzone_key']] if it['id'] == '')
+            context['images'] = list({'name': it['name'], 'id': clean_text(str(it['name']))} for it in
+                                     self.request.session[context['dropzone_key']] if it['id'] == '')
 
         return context
 
@@ -2077,7 +2127,7 @@ class ReviewsUpdate(UpdateView):
 
         instance = self.get_object()
         key = self.model._meta.verbose_name
-    
+
         for attr, value in data_dict.items():
             setattr(instance, attr, value)
 
@@ -2095,7 +2145,7 @@ class ReviewsUpdate(UpdateView):
                         request.session.modified = True
                     except:
                         pass
-        
+
         instance.save()
 
         return redirect("review_list")
@@ -2129,14 +2179,11 @@ class ShortApplicationUpdate(UpdateView):
     template_name = 'admin/short_apl_edit.html'
     success_url = '/admin/quick_applications'
 
-
     def get_context_data(self, **kwargs):
         context = super(ShortApplicationUpdate, self).get_context_data(**kwargs)
         context['statuses'] = ["На рассмотрении", "Рассмотрено", "Отклонено"]
 
         return context
-
-
 
 
 # del review image
@@ -2183,5 +2230,3 @@ class NewAplList(ListView):
 class NewAplDetail(DetailView):
     model = SomeAplication
     template_name = 'admin/some_apl_detail.html'
-
-

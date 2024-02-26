@@ -73,7 +73,9 @@ urlpatterns = [
     path("contacts", views.NewAplList.as_view(), name='contacts_list'),
     path("contacts/<int:pk>", views.NewAplDetail.as_view(), name='contacts_detail'),
     path("leads", views.LeadsList.as_view(), name='leads_list'),
+    path("leads2", views.LeadsList2.as_view(), name='leads2_list'),
     path('leads/<int:pk>', views.LeadDetailView.as_view(), name='leads_detail'),
+    path('leads2/<int:pk>', views.LeadDetailView2.as_view(), name='leads2_detail'),
 
     path("fill_db_qwertyuiop", user_passes_test(lambda u: u.is_superuser, login_url='login_admin')(views.fill_db_view))
 ]
