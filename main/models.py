@@ -72,7 +72,8 @@ class Leads(models.Model):
     email = models.EmailField('Email')
     nbm = models.CharField('Nbm', blank=True, null=True, max_length=255)
     car_year = models.CharField("Car year", max_length=4, validators=[is_numeric_validator])
-    #service_type = models.ForeignKey()
+
+    # service_type = models.ForeignKey()
 
     def format_date(self):
         return f'{self.date.month}/{self.date.day}/{self.date.year}'
@@ -111,7 +112,8 @@ class Applications(models.Model):
     admin_notes = models.TextField('Notes', blank=True, null=True)
     final_price = models.FloatField('Final Price', validators=[MinValueValidator(1)], blank=True, null=True)
     contact_me = models.BooleanField('Contact me', default=True)
-    contact_else = models.CharField('Contact else', blank=True, null=True, max_length=10, validators=[is_numeric_validator])
+    contact_else = models.CharField('Contact else', blank=True, null=True, max_length=10,
+                                    validators=[is_numeric_validator])
     adres_type = models.CharField("Adres type", max_length=255, choices=ADRES_TYPES)
     business_name = models.CharField("Business name", max_length=255, blank=True, null=True)
     someone_fullname = models.CharField("Someone fullname", max_length=255, blank=True, null=True)
@@ -133,7 +135,6 @@ class AplicationNbm(models.Model):
     nbm = models.CharField('Nbm', blank=True, null=True, max_length=10, validators=[is_numeric_validator])
 
 
-
 # short applications
 class ShortApplication(models.Model):
     STATUS = [('На рассмотрении', "На рассмотрении"), ("Рассмотрено", "Рассмотрено"), ("Отклонено", "Отклонено")]
@@ -142,16 +143,31 @@ class ShortApplication(models.Model):
     status = models.CharField('Status', default='На рассмотрении', max_length=255, choices=STATUS)
 
 
-
 # short apl
 class SomeAplication(models.Model):
     SUBJECT = [('0', 'I want a free quote'), ('1', 'I have an existing order'),
                ('2', 'I want to book a shipment'), ('3', 'Other questions')]
 
     name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField('Email', blank=True, null=True) 
+    email = models.EmailField('Email', blank=True, null=True)
     nmb = models.CharField(max_length=255, blank=True, null=True)
     subject = models.CharField('Subject', max_length=255, choices=SUBJECT, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
 
 
+class Leads2(models.Model):
+    VEHICLE_RUNS = [('Yes', 'Yes'), ('No', 'No')]
+    SHIP_VIA_ID = [(1, '1'), (2, '2')]
+    car_year = models.IntegerField()
+    email = models.EmailField()
+    date = models.DateField()
+    nbm = models.CharField(max_length=255, blank=True, null=True)
+    ship_from = models.ForeignKey(
+        City, on_delete=models.CASCADE, related_name='ship2_fromappl')  # it
+    ship_to = models.ForeignKey(
+        City, on_delete=models.CASCADE, related_name='ship2_to_appl')  # it
+    ship_via_id = models.IntegerField(
+        'Ship via id', max_length=255, choices=SHIP_VIA_ID)
+    vehicle = models.CharField(max_length=255, blank=True, null=True)
+    vehicle_runs = models.CharField(
+        'Vehicle Runs', max_length=255, choices=VEHICLE_RUNS)

@@ -1,10 +1,14 @@
+import logging
+
 from django.core.files.storage import default_storage
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 from easy_thumbnails.templatetags.thumbnail import get_thumbnailer
 from rest_framework import serializers
 
 from admins.models import Services, Articles, StaticInformation, AboutUs, Languages, MetaTags, Reviews
 from .models import CarMarks, CarsModel, City, States, Leads, Applications, AplicationNbm, ShortApplication, \
-    SomeAplication
+    SomeAplication, Leads2
 from .utils import *
 
 
@@ -230,38 +234,60 @@ class LeadsCreateSerialzier(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['price', 'price_first_tarif ', 'price_second_tarif']
 
-    def save(self, **kwargs):
-        lead = super().save(**kwargs)
-        url = 'https://ml.msgplane.com/api/rest/get/price/'
-
-        params = {
-            'api_key': settings.SRM_API_KEY,
-            "pickup_zip": lead.ship_from.zip,
-            "dropoff_zip": lead.ship_to.zip,
-            "estimated_ship_date": str(lead.format_date()),
-            "vehicle_type": lead.vehicle.vehicle_type,
-            "ship_via_id": lead.ship_via_id,
-            "vehicle_runs": lead.vehicle_runs
-        }
-        price_request = requests.get(url=url, params=params).json()
-
-        if not price_request:
-            price_request = {}
-
-        lead.price = float(price_request.get('1', 0))
-        lead.price_first_tarif = float(price_request.get('1', 0)) + 200
-        lead.price_second_tarif = float(price_request.get('1', 0)) + 500
-
-        distance = get_distance(lead.ship_to, lead.ship_from)
-        lead.distance = distance
-        lead.save()
-
-        return lead
+    # def save(self, **kwargs):
+    #     lead = super().save(**kwargs)
+    #     url = 'https://ml.msgplane.com/api/rest/get/price/'
+    #
+    #     params = {
+    #         'api_key': settings.SRM_API_KEY,
+    #         "pickup_zip": lead.ship_from.zip,
+    #         "dropoff_zip": lead.ship_to.zip,
+    #         "estimated_ship_date": str(lead.format_date()),
+    #         "vehicle_type": lead.vehicle.vehicle_type,
+    #         "ship_via_id": lead.ship_via_id,
+    #         "vehicle_runs": lead.vehicle_runs
+    #     }
+    #     price_request = requests.get(url=url, params=params).json()
+    #
+    #     if not price_request:
+    #         price_request = {}
+    #
+    #     lead.price = float(price_request.get('1', 0))
+    #     lead.price_first_tarif = float(price_request.get('1', 0)) + 200
+    #     lead.price_second_tarif = float(price_request.get('1', 0)) + 500
+    #
+    #     distance = get_distance(lead.ship_to, lead.ship_from)
+    #     lead.distance = distance
+    #     lead.save()
+    #
+    #     return lead
 
     def to_representation(self, instance):
         serializer = LeadsViewSerializer(instance, context={'request': self.context.get('request')})
 
         return serializer.data
+
+
+class Leads2CreateSerialzier(serializers.ModelSerializer):
+    date = serializers.DateField(format="%d/%m/%Y")
+
+    class Meta:
+        model = Leads2
+        fields = '__all__'
+
+    def create(self, validated_data):
+        html_templ = get_template('email2.html')
+
+        try:
+            subject = f"Transport Request For {validated_data['vehicle']}"
+            text_content = 'some'
+            html_content = html_templ.render(context=validated_data)
+            msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER,
+                                         ["leads@matelogisticss.com"])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+        except Exception as e:
+            logging.error(str(e))
 
 
 # application nbm serializer

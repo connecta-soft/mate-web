@@ -9,9 +9,9 @@ from rest_framework.response import Response
 
 from admins.models import Articles, Languages, Translations, Services, AboutUs, StaticInformation, Reviews
 from .models import CarMarks, CarsModel, States, City, Leads, Applications, AplicationNbm, ShortApplication, \
-    SomeAplication
+    SomeAplication, Leads2
 from .serializers import ArticleSerializer, ServiceSerializer, AboutUsSerializer, StaticInformationSerializer, \
-    TranslationSerializer, LangsSerializer
+    TranslationSerializer, LangsSerializer, Leads2CreateSerialzier
 from .serializers import CarMarkSerializer, CarModelSerializer, CitySimpleSerializer, CitySerializer, StateSerializer, \
     LeadsCreateSerialzier, LeadsViewSerializer, ApplicationCreateSerializer, ReviewSerializer, \
     ShortApplicationSerializer
@@ -331,3 +331,8 @@ class GetOrderStatus(views.APIView):
         response_data['status'] = status_dict.get(response_data['lead_status'], 'ERROR')
 
         return Response(response_data)
+
+
+class LeadCreate2(generics.CreateAPIView):
+    queryset = Leads2.objects.all()
+    serializer_class = Leads2CreateSerialzier

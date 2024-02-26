@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import City, States, Leads, Applications
+from .models import City, States, Leads, Applications, Leads2
+
 # Register your models here.
 
 
@@ -16,3 +17,12 @@ class LeadsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Leads, LeadsAdmin)
+
+class LeadsAdmin2(admin.ModelAdmin):
+    list_display = [it.name for it in Leads._meta.fields]
+
+    class Meta:
+        models = Leads
+
+
+admin.site.register(Leads2, LeadsAdmin2)

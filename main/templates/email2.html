@@ -1,0 +1,42 @@
+{% load get_item %}
+
+<style>
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+</style>
+
+<div>
+    <h4>Request details:</h4>
+
+    <ul>
+        <li>
+            Transport_car_FROM: {{ ship_from.name|get_item:en }}
+        </li>
+        <li>
+            Transport_car_TO: {{ ship_to.name|get_item:en }}
+        </li>
+        <li>
+            Transport_type: {% if ship_via_id == '1' %} Open {% else %} Enclosed {% endif %}
+        </li>
+        <li>
+            Vehicle_year: {{ car_year }}
+        </li>
+        <li>
+            Vehicle: {{ vehicle }}
+        </li>
+        <li>
+            Vehicle runs: {{ vehicle_runs }}
+        </li>
+        <li>
+            Email: {{ email }}
+        </li>
+        <li>
+            Phone: {{ nbm }}
+        </li>
+        <li>
+            First available date: {{ date|date:'Y.m.d' }}
+        </li>
+    </ul>
+</div>
