@@ -63,6 +63,31 @@
                     <th>
                         <a class="list-sort text-muted">Ship to</a>
                     </th>
+                    <th>
+                        <a class="list-sort text-muted">Car year</a>
+                    </th>
+
+                    <th>
+                        <a class="list-sort text-muted">Email</a>
+                    </th>
+
+                    <th>
+                        <a class="list-sort text-muted">Date</a>
+                    </th>
+                    <th>
+                        <a class="list-sort text-muted">Number</a>
+                    </th>
+                    <th>
+                        <a class="list-sort text-muted">Ship Via ID</a>
+                    </th>
+
+                    <th>
+                        <a class="list-sort text-muted">Vehicle</a>
+                    </th>
+
+                    <th>
+                        <a class="list-sort text-muted">Vehicle Runs</a>
+                    </th>
                     <th style="width: 200px;"></th>
                 </tr>
             </thead>
@@ -79,18 +104,51 @@
                     </td>
                     <td>
                         <p class="item-phone text-reset">
-                            {{ obj.ship_from.name|get_item:lang.code }}
+                            {{ obj.ship_from.name }}
                         </p>
                     </td>
                     <td>
                         <p class="item-phone text-reset">
-                            {{ obj.ship_to.name|get_item:lang.code }}
+                            {{ obj.ship_to.name }}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="item-phone text-reset">
+                            {{ obj.car_year }}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="item-phone text-reset">
+                            {{ obj.email }}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="item-phone text-reset">
+                            {{ obj.date }}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="item-phone text-reset">
+                            {{ obj.nbm }}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="item-phone text-reset">
+                            {{ obj.ship_via_id }}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="item-phone text-reset">
+                            {{ obj.vehicle }}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="item-phone text-reset">
+                            {{ obj.vehicle_runs }}
                         </p>
                     </td>
                     <td>
                         <div class="d-flex justify-content-end">
-                            <a href="{% url 'leads_detail' obj.id %}" class="btn btn-sm btn-info"><i
-                                    class="fe fe-info"></i></a>
                             <a class="btn btn-sm btn-danger ms-3"
                                 onclick="var result = confirm('Want to delete?');if (result){form_submit_in_table('delete-form{{ obj.id }}')}"><i
                                     class="fe fe-trash"></i></a>
