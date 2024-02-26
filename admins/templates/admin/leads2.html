@@ -104,12 +104,12 @@
                     </td>
                     <td>
                         <p class="item-phone text-reset">
-                            {{ obj.ship_from.name }}
+                            {{ obj.ship_from.name|get_item:lang.code }}
                         </p>
                     </td>
                     <td>
                         <p class="item-phone text-reset">
-                            {{ obj.ship_to.name }}
+                            {{ obj.ship_to.name|get_item:lang.code }}
                         </p>
                     </td>
                     <td>
