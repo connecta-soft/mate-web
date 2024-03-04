@@ -269,7 +269,7 @@ class LeadsCreateSerialzier(serializers.ModelSerializer):
 
 
 class Leads2CreateSerialzier(serializers.ModelSerializer):
-    date = serializers.DateField(format="%d/%m/%Y")
+    date = serializers.DateField(format="%m/%d/%Y")
 
     class Meta:
         model = Leads2
