@@ -169,5 +169,6 @@ class Leads2(models.Model):
     ship_via_id = models.IntegerField(
         'Ship via id', max_length=255, choices=SHIP_VIA_ID)
     vehicle = models.CharField(max_length=255, blank=True, null=True)
+    vehicle_model = models.CharField(max_length=255, blank=True, null=True)
     vehicle_runs = models.CharField(
         'Vehicle Runs', max_length=255, choices=VEHICLE_RUNS)

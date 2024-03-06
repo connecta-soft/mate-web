@@ -13,19 +13,22 @@
 
     <ul>
         <li>
-            Transport_car_FROM: {{ ship_from.name.en }}
+            Transport_car_FROM: {{ ship_from.name.en }}, {{ ship_from.state.code }}, {{ ship_from.zip }}
         </li>
         <li>
-            Transport_car_TO: {{ ship_to.name.en }}
+            Transport_car_TO: {{ ship_to.name.en }}, {{ ship_to.state.code }}, {{ ship_to.zip }}
         </li>
         <li>
-            Transport_type: {% if ship_via_id == '1' %} Open {% else %} Enclosed {% endif %}
+            Transport_type: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}
         </li>
         <li>
             Vehicle_year: {{ car_year }}
         </li>
         <li>
-            Vehicle: {{ vehicle }}
+            Vehicle_make: {{ vehicle }}
+        </li>
+        <li>
+            Vehicle_model: {{ vehicle_model }}
         </li>
         <li>
             Vehicle runs: {{ vehicle_runs }}
@@ -37,7 +40,7 @@
             Phone: {{ nbm }}
         </li>
         <li>
-            First available date: {{ date|date:'Y.m.d' }}
+            First available date: {{ date|date:'m.d.Y' }}
         </li>
     </ul>
 </div>
