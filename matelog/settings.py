@@ -81,6 +81,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': 'localhost',
+#         'NAME': 'mate',
+#         'USER': 'myuser',
+#         'PASSWORD': 'mypassword',
+#         'PORT': '5432',
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -152,7 +163,7 @@ LOGOUT_REDIRECT_URL = '/admin/login'
 
 
 # date format
-DATE_FORMAT = {'Y.m.d'}
+DATE_FORMAT = 'm/d/Y'
 
 
 # rest
@@ -162,7 +173,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'DATE_INPUT_FORMATS': [("%Y.%m.%d"), ("%d/%m/%Y")],
+    'DATE_INPUT_FORMATS': ["%m/%d/%Y"],
     'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
