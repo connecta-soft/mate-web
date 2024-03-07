@@ -1,4 +1,3 @@
-
 {% load get_item %}
 
 <style>
@@ -12,35 +11,50 @@
     <h4>Request details:</h4>
 
     <ul>
-        <li>
-            Transport_car_FROM: {{ ship_from.name.en }}, {{ ship_from.state.code }}, {{ ship_from.zip }}
-        </li>
-        <li>
-            Transport_car_TO: {{ ship_to.name.en }}, {{ ship_to.state.code }}, {{ ship_to.zip }}
-        </li>
-        <li>
+        <p>
+            Origin_City: {{ ship_from.name.en }}
+        </p>
+        <p>
+            Origin_State: {{ ship_from.state.code }}
+        </p>
+        <p>
+            Origin_Zip: {{ ship_from.zip }}
+        </p>
+        <p>
+            Destination_City: {{ ship_to.name.en }}
+        </p>
+        <p>
+            Destination_State: {{ ship_to.state.code }}
+        </p>
+        <p>
+            Destination_Zip: {{ ship_to.zip }}
+        </p>
+        <p>
             Transport_type: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}
-        </li>
-        <li>
+        </p>
+        <p>
             Vehicle_year: {{ car_year }}
-        </li>
-        <li>
+        </p>
+        <p>
             Vehicle_make: {{ vehicle }}
-        </li>
-        <li>
+        </p>
+        <p>
             Vehicle_model: {{ vehicle_model }}
-        </li>
-        <li>
+        </p>
+        <p>
+            Vehicle_type: {{ vehicle_type }}
+        </p>
+        <p>
             Vehicle runs: {{ vehicle_runs }}
-        </li>
-        <li>
+        </p>
+        <p>
             Email: {{ email }}
-        </li>
-        <li>
+        </p>
+        <p>
             Phone: {{ nbm }}
-        </li>
-        <li>
-            First available date: {{ date|date:'m.d.Y' }}
-        </li>
+        </p>
+        <p>
+            First available date: {{ date|date:'Y.m.d' }}
+        </p>
     </ul>
 </div>
