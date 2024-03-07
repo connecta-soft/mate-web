@@ -157,12 +157,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'DATE_INPUT_FORMATS': [("%Y.%m.%d"), ("%d/%m/%Y")],
+    'DATE_INPUT_FORMATS': ["%m/%d/%Y"],
     'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 #REST_FRAMEWORK = {"DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",)} # noqa F405
-TIME_ZONE = "Asia/Tashkent"
+TIME_ZONE = "America/New_York"
 LANGUAGE_CODE = 'ru-RU'
 CSRF_TRUSTED_ORIGINS = [
     "https://matelogisticss.com",
