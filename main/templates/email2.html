@@ -10,51 +10,55 @@
 <div>
     <h4>Request details:</h4>
 
-    <ul>
-        <p>
-            Origin_City: {{ ship_from.name.en }}
-        </p>
-        <p>
-            Origin_State: {{ ship_from.state.code }}
-        </p>
-        <p>
-            Origin_Zip: {{ ship_from.zip }}
-        </p>
-        <p>
-            Destination_City: {{ ship_to.name.en }}
-        </p>
-        <p>
-            Destination_State: {{ ship_to.state.code }}
-        </p>
-        <p>
-            Destination_Zip: {{ ship_to.zip }}
-        </p>
-        <p>
-            Transport_type: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}
-        </p>
-        <p>
-            Vehicle_year: {{ car_year }}
-        </p>
-        <p>
-            Vehicle_make: {{ vehicle }}
-        </p>
-        <p>
-            Vehicle_model: {{ vehicle_model }}
-        </p>
-        <p>
-            Vehicle_type: {{ vehicle_type }}
-        </p>
-        <p>
-            Vehicle runs: {{ vehicle_runs }}
-        </p>
-        <p>
-            Email: {{ email }}
-        </p>
-        <p>
-            Phone: {{ nbm }}
-        </p>
-        <p>
-            First available date: {{ date|date:'m/d/Y' }}
-        </p>
-    </ul>
+    <p>
+        Moving From City: {{ ship_from.name.en }}
+    </p>
+    <p>
+        Moving From State: {{ ship_from.state.code }}
+    </p>
+    <p>
+        Moving From Zip Code: {{ ship_from.zip }}
+    </p>
+    <p>
+        Moving To City: {{ ship_to.name.en }}
+    </p>
+    <p>
+        Moving To State: {{ ship_to.state.code }}
+    </p>
+    <p>
+        Moving To Zip Code: {{ ship_to.zip }}
+    </p>
+    <p>
+        Type Of Carrier: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}
+    </p>
+    <p>
+        Year: {{ car_year }}
+    </p>
+    <p>
+        Make: {{ vehicle }}
+    </p>
+    <p>
+        Model: {{ vehicle_model }}
+    </p>
+    <p>
+        Type: {{ vehicle_type }}
+    </p>
+    <p>
+        Running Condition: {{ vehicle_runs }}
+    </p>
+    <p>
+        First Name: First
+    </p>
+    <p>
+        Last Name: Last
+    </p>
+    <p>
+        Email: {{ email }}
+    </p>
+    <p>
+        Phone: {{ nbm }}
+    </p>
+    <p>
+        Move Date: {{ date|date:'m/d/Y' }}
+    </p>
 </div>

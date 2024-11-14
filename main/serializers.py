@@ -279,11 +279,11 @@ class Leads2CreateSerialzier(serializers.ModelSerializer):
         html_templ = get_template('email2.html')
 
         try:
-            subject = f"Transport Request For {validated_data['vehicle']}"
+            subject = f"The New Transport Request From Web"
             text_content = 'some'
             html_content = html_templ.render(context=validated_data)
             msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER,
-                                         ["leads@matelogisticss.com"])
+                                         ["info@matelogisticss.com"])
             msg.attach_alternative(html_content, "text/html")
             msg.send()
         except Exception as e:
