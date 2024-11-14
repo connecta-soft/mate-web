@@ -5,10 +5,19 @@
         list-style-type: none;
         padding: 0;
     }
+    p {
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: initial !important;
+    }
+    div {
+        margin: 0;
+        padding: 0; 
+        display: block;
+    }
 </style>
 
 <div>
-    <h4>Request details:</h4>
 
     <p>
         Moving From City: {{ ship_from.name.en }}
@@ -41,7 +50,7 @@
         Model: {{ vehicle_model }}
     </p>
     <p>
-        Type: {{ vehicle_type }}
+        Type: Unselect
     </p>
     <p>
         Running Condition: {{ vehicle_runs }}
