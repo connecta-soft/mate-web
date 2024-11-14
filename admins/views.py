@@ -1,29 +1,19 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
-from .models import Articles, Languages, Translations, TranlsationGroups, StaticInformation, AdminInputs, \
-    ArticleCategories, ArticleImages
-from .models import AboutUs, Services, MetaTags, telephone_validator, Reviews
-from .forms import LngForm, UserForm, ApplicationForm
-from django.core.exceptions import ValidationError
-import datetime
-from django.db.models import Q
-import json
-from django.apps import apps
-from django.http import JsonResponse, QueryDict, HttpResponseRedirect
-from django.core.files.storage import default_storage
-from .utils import *
-from django.core.paginator import Paginator
-from .serializers import TranslationSerializer
-from rest_framework.response import Response
-from django.urls import reverse_lazy
-from django.contrib.auth.models import User
-from main.models import CarsModel, CarMarks, States, City, Leads, Applications, ShortApplication, SomeAplication, Leads2
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth import logout
-import os
-from django.conf import settings
 import requests
+from django.conf import settings
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+
+from main.models import CarsModel, CarMarks, States, City, Leads, Applications, ShortApplication, SomeAplication, Leads2
 from main.utils import get_distance
+from .forms import LngForm, UserForm, ApplicationForm
+from .models import AboutUs, Services, MetaTags, Reviews
+from .models import ArticleCategories
+from .serializers import TranslationSerializer
+from .utils import *
 
 
 # Create your views here.
@@ -1839,8 +1829,6 @@ class LeadDetailView(DetailView):
         return context
 
 
-
-
 # lead detail view
 class LeadDetailView2(DetailView):
     model = Leads2
@@ -1850,6 +1838,7 @@ class LeadDetailView2(DetailView):
         context = super(LeadDetailView, self).get_context_data(**kwargs)
         context['lang'] = Languages.objects.filter(active=True).filter(default=True).first()
         return context
+
 
 # applicatins list
 class ApplicationsList(ListView):

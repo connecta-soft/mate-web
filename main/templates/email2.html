@@ -44,7 +44,7 @@
         Type: {{ vehicle_type }}
     </p>
     <p>
-        Running Condition: {{ vehicle_runs }}
+        Running Condition: {% if vehicle_runs == YES %} Running {% else %} NonRunning {% endif %}
     </p>
     <p>
         First Name: First
