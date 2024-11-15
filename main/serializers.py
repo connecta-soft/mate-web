@@ -284,7 +284,7 @@ class Leads2CreateSerialzier(serializers.ModelSerializer):
             html_content = html_templ.render(context=validated_data)
             msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER,
                                          ["info@matelogisticss.com"])
-            msg.attach_alternative(html_content, "text/html")
+            msg.attach_alternative(html_content, "text/plain")
             msg.send()
         except Exception as e:
             logging.error(str(e))
