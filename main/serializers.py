@@ -289,6 +289,15 @@ class Leads2CreateSerialzier(serializers.ModelSerializer):
             Email: { lead.email }
             Phone: { lead.nbm }
             
+            Moving From City: { lead.ship_from.name.en }
+            Moving From State: { lead.ship_from.state.code }
+            Moving From Zip Code: { lead.ship_from.zip }
+            
+            Moving To City: { lead.ship_to.name.en }
+            Moving To State: { lead.ship_to.state.code }
+            Moving To Zip Code: { lead.ship_to.zip }
+            
+            Move Date: { lead.date.strftime("%m/%d/%Y") }
             Make: { lead.vehicle }
             Model: { lead.vehicle_model }
             Year: { lead.car_year }
