@@ -276,19 +276,44 @@ class Leads2CreateSerialzier(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        html_templ = get_template('email2.html')
-
+        # html_templ = get_template('email2.html')
+        lead = Leads2.objects.create(**validated_data)
         try:
             subject = f"The New Transport Request From Web"
-            text_content = 'some'
-            html_content = html_templ.render(context=validated_data)
+
+            t = 'Open' if lead.ship_via_id == 1 else 'Enclosed'
+
+            text_content = f""""
+            First Name: First
+            Last Name: Last
+            Email: { lead.email }
+            Phone: { lead.nbm }
+            
+            Moving From City: { lead.ship_from.name.en }
+            Moving From State: { lead.ship_from.state.code }
+            Moving From Zip Code: { lead.ship_from.zip }
+            
+            Moving To City: { lead.ship_to.name.en }
+            Moving To State: { lead.ship_to.state.code }
+            Moving To Zip Code: { lead.ship_to.zip }
+            
+            Move Date: { lead.date.strftime("%m/%d/%Y") }
+            Make: { lead.vehicle }
+            Model: { lead.vehicle_model }
+            Year: { lead.car_year }
+            
+            Type Of Carrier: { t }
+            Running Condition: { lead.vehicle_runs }
+            Type: Unselect
+            """
+            # html_content = html_templ.render(context=validated_data)
             msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER,
                                          ["info@matelogisticss.com"])
-            msg.attach_alternative(html_content, "text/plain")
+            msg.attach_alternative(text_content, "text/plain")
             msg.send()
         except Exception as e:
             logging.error(str(e))
-        return Leads2.objects.create(**validated_data)
+        return lead
 
 
 # application nbm serializer
