@@ -3,30 +3,30 @@
 <div>
 
     <p>
-        First Name: First
-        Last Name: Last
-        Email: {{ email }}
+        First Name: First<br>
+        Last Name: Last<br>
+        Email: {{ email }}<br>
         Phone: {{ nbm }}
     </p>
     <p>
-        Moving From City: {{ ship_from.name.en }}
-        Moving From State: {{ ship_from.state.code }}
+        Moving From City: {{ ship_from.name.en }}<br>
+        Moving From State: {{ ship_from.state.code }}<br>
         Moving From Zip Code: {{ ship_from.zip }}
     </p>
     <p>
-        Moving To City: {{ ship_to.name.en }}
-        Moving To State: {{ ship_to.state.code }}
+        Moving To City: {{ ship_to.name.en }}<br>
+        Moving To State: {{ ship_to.state.code }}<br>
         Moving To Zip Code: {{ ship_to.zip }}
     </p>
     <p>
-        Move Date: {{ date|date:'m/d/Y' }}
-        Make: {{ vehicle }}
-        Model: {{ vehicle_model }}
+        Move Date: {{ date|date:'m/d/Y' }}<br>
+        Make: {{ vehicle }}<br>
+        Model: {{ vehicle_model }}<br>
         Year: {{ car_year }}
     </p>
     <p>
-        Type Of Carrier: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}
-        Running Condition: {{ vehicle_runs }}
+        Type Of Carrier: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}<br>
+        Running Condition: {{ vehicle_runs }}<br>
         Type: Unselect
     </p>
 </div>
