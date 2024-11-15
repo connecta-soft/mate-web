@@ -289,11 +289,11 @@ class Leads2CreateSerialzier(serializers.ModelSerializer):
             Email: { lead.email }
             Phone: { lead.nbm }
             
-            Moving From City: { lead.ship_from.name.en }
+            Moving From City: { lead.ship_from.name.get('en') or '' }
             Moving From State: { lead.ship_from.state.code }
             Moving From Zip Code: { lead.ship_from.zip }
             
-            Moving To City: { lead.ship_to.name.en }
+            Moving To City: { lead.ship_to.name.get('en') or '' }
             Moving To State: { lead.ship_to.state.code }
             Moving To Zip Code: { lead.ship_to.zip }
             
