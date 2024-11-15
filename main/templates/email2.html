@@ -1,73 +1,32 @@
 {% load get_item %}
 
-<style>
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    p {
-        margin: 0 !important;
-        padding: 0 !important;
-        line-height: initial !important;
-    }
-    div {
-        margin: 0;
-        padding: 0; 
-        display: block;
-    }
-</style>
-
 <div>
 
     <p>
+        First Name: First
+        Last Name: Last
+        Email: {{ email }}
+        Phone: {{ nbm }}
+    </p>
+    <p>
         Moving From City: {{ ship_from.name.en }}
-    </p>
-    <p>
         Moving From State: {{ ship_from.state.code }}
-    </p>
-    <p>
         Moving From Zip Code: {{ ship_from.zip }}
     </p>
     <p>
         Moving To City: {{ ship_to.name.en }}
-    </p>
-    <p>
         Moving To State: {{ ship_to.state.code }}
-    </p>
-    <p>
         Moving To Zip Code: {{ ship_to.zip }}
     </p>
     <p>
-        Type Of Carrier: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}
-    </p>
-    <p>
+        Move Date: {{ date|date:'m/d/Y' }}
+        Make: {{ vehicle }}
+        Model: {{ vehicle_model }}
         Year: {{ car_year }}
     </p>
     <p>
-        Make: {{ vehicle }}
-    </p>
-    <p>
-        Model: {{ vehicle_model }}
-    </p>
-    <p>
-        Type: Unselect
-    </p>
-    <p>
+        Type Of Carrier: {% if ship_via_id == 1 %} Open {% else %} Enclosed {% endif %}
         Running Condition: {{ vehicle_runs }}
-    </p>
-    <p>
-        First Name: First
-    </p>
-    <p>
-        Last Name: Last
-    </p>
-    <p>
-        Email: {{ email }}
-    </p>
-    <p>
-        Phone: {{ nbm }}
-    </p>
-    <p>
-        Move Date: {{ date|date:'m/d/Y' }}
+        Type: Unselect
     </p>
 </div>
